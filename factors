@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+ARGV.map!(&:to_i)
+
+def results
+  ARGV.map do |num|
+    [num, factors_of(num)]
+  end.to_h
+end
+
+def factors_of(num)
+  ARGV.select do |arg|
+    next if num == arg
+
+    num % arg == 0
+  end
+end
+
+puts results
