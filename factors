@@ -1,10 +1,29 @@
 #!/usr/bin/env ruby
-
+require 'json'
 ARGV.map!(&:to_i)
 
 def results
+  cache[ARGV.to_s] || write_cache
+end
+
+def cache
+  @cache ||=
+    if File.exists?("cache.json")
+      JSON.parse(File.read("cache.json"))
+    else
+      {}
+    end
+end
+
+def write_cache
+  cache[ARGV] = compute
+  File.open("cache.json", "w") { |f| f.write cache.to_json }
+  cache[ARGV]
+end
+
+def compute
   ARGV.map do |num|
-    [num, factors_of(num)]
+    [num.to_s, factors_of(num)]
   end.to_h
 end
 
